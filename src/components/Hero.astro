@@ -1,6 +1,5 @@
 ---
 const cells = Array.from({ length: 9 }, (_, i) => i);
-
 interface Stat {
   label: string;
   value: string;
@@ -9,19 +8,17 @@ interface Stat {
 const stats: Stat[] = [
   { label: 'weakness', value: '---' },
   { label: 'resistance', value: '---' },
-  { label: 'retreat', value: '*' },
+  { label: 'retreat', value: '*' }
 ];
 ---
 
 <div class='card-container'>
-  {cells.map((i) => <div class='tracker' style={`--i: ${i}`}></div>)}
+  {cells.map(i => <div class='tracker' style={`--i: ${i}`} />)}
 
   <div class='holo-card'>
     <div class='card-content'>
       <div class='card-header'>
-        <span class='project-title'
-          >Project Name <span class='ex'>ex</span></span
-        >
+        <span class='project-title'>Project Name <span class='ex'>ex</span></span>
         <span class='project-hp'>HP 100</span>
       </div>
 
@@ -43,12 +40,14 @@ const stats: Stat[] = [
       </div>
 
       <div class='card-footer'>
-        {stats.map((stat) => (
-          <div class='stat-box'>
-            <span class='stat-label'>{stat.label}</span>
-            <span class='stat-value'>{stat.value}</span>
-          </div>
-        ))}
+        {
+          stats.map(stat => (
+            <div class='stat-box'>
+              <span class='stat-label'>{stat.label}</span>
+              <span class='stat-value'>{stat.value}</span>
+            </div>
+          ))
+        }
       </div>
     </div>
 
@@ -132,8 +131,7 @@ const stats: Stat[] = [
     transform-style: preserve-3d;
     overflow: hidden;
     transform: rotateX(calc((1 - var(--row)) * 15deg))
-      rotateY(calc((var(--col) - 1) * 15deg))
-      scale(var(--lift));
+      rotateY(calc((var(--col) - 1) * 15deg)) scale(var(--lift));
     transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
 
     &::after {
@@ -392,13 +390,16 @@ const stats: Stat[] = [
 <script>
   const containers = document.querySelectorAll<HTMLElement>('.card-container');
 
-  containers.forEach((container) => {
+  containers.forEach(container => {
     const card = container.querySelector<HTMLElement>('.holo-card');
     if (!card) return;
 
-    container.addEventListener('pointerover', (event) => {
+    container.addEventListener('pointerover', event => {
       const cell = (event.target as HTMLElement).closest<HTMLElement>('.tracker');
-      card.style.setProperty('--i', cell?.style.getPropertyValue('--i').trim() || '4');
+      card.style.setProperty(
+        '--i',
+        cell?.style.getPropertyValue('--i').trim() || '4'
+      );
     });
 
     container.addEventListener('pointerleave', () => {
