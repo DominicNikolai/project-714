@@ -1,0 +1,408 @@
+---
+const cells = Array.from({ length: 9 }, (_, i) => i);
+
+interface Stat {
+  label: string;
+  value: string;
+}
+
+const stats: Stat[] = [
+  { label: 'weakness', value: '---' },
+  { label: 'resistance', value: '---' },
+  { label: 'retreat', value: '*' },
+];
+---
+
+<div class='card-container'>
+  {cells.map((i) => <div class='tracker' style={`--i: ${i}`}></div>)}
+
+  <div class='holo-card'>
+    <div class='card-content'>
+      <div class='card-header'>
+        <span class='project-title'
+          >Project Name <span class='ex'>ex</span></span
+        >
+        <span class='project-hp'>HP 100</span>
+      </div>
+
+      <div class='card-body'>
+        <div class='tech-stack'>
+          <i>Tech 1 • Tech 2 • Tech 3</i>
+        </div>
+
+        <div class='attack-move'>
+          <div class='move-header'>
+            <span class='move-name'>Key Feature</span>
+            <span class='move-damage'>50</span>
+          </div>
+          <p class='move-desc'>
+            A brief, impactful description of your project's main feature,
+            architecture, or technical accomplishment goes here.
+          </p>
+        </div>
+      </div>
+
+      <div class='card-footer'>
+        {stats.map((stat) => (
+          <div class='stat-box'>
+            <span class='stat-label'>{stat.label}</span>
+            <span class='stat-value'>{stat.value}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <div class='holo-glare'></div>
+    <div class='holo-spotlight'></div>
+    <div class='cartoon-shine'></div>
+  </div>
+</div>
+
+<style is:global>
+  body:has(.card-container) {
+    display: grid;
+    place-items: center;
+    block-size: 100dvh;
+    background:
+      radial-gradient(
+        circle at 50% 42%,
+        oklch(0.45 0.11 285 / 0.55) 0%,
+        transparent 58%
+      ),
+      radial-gradient(
+        circle at 16% 84%,
+        oklch(0.38 0.12 215 / 0.5) 0%,
+        transparent 52%
+      ),
+      radial-gradient(
+        circle at 86% 76%,
+        oklch(0.36 0.14 335 / 0.45) 0%,
+        transparent 50%
+      ),
+      radial-gradient(
+        circle at 50% 42%,
+        rgb(0 0 0 / 0) 0%,
+        rgb(0 0 0 / 0.55) 100%
+      ),
+      linear-gradient(180deg, #0c0e16, #05060b 72%);
+    background-attachment: fixed;
+    overflow: clip;
+  }
+
+  .card-container {
+    position: relative;
+    perspective: 1000px;
+    inline-size: 340px;
+    block-size: 480px;
+
+    .tracker {
+      position: absolute;
+      z-index: 200;
+      inline-size: 33.33%;
+      block-size: 33.33%;
+
+      --col: mod(var(--i), 3);
+      --row: round(down, calc(var(--i) / 3), 1);
+
+      inset-block-start: calc(var(--row) * 33.33%);
+      inset-inline-start: calc(var(--col) * 33.33%);
+
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
+
+  .holo-card {
+    --i: 4;
+    --col: mod(var(--i), 3);
+    --row: round(down, calc(var(--i) / 3), 1);
+    --pos-x: calc(100% - var(--col) * 50%);
+    --pos-y: calc(100% - var(--row) * 50%);
+    --lift: 1;
+
+    position: relative;
+    inline-size: 100%;
+    block-size: 100%;
+    border-radius: 15px;
+    background: linear-gradient(135deg, #b0bec5, #eceff1, #90a4ae, #607d8b);
+    box-shadow:
+      0 10px 30px rgb(0 0 0 / 0.5),
+      inset 0 0 0 2px rgb(255 255 255 / 0.8);
+    transform-style: preserve-3d;
+    overflow: hidden;
+    transform: rotateX(calc((1 - var(--row)) * 15deg))
+      rotateY(calc((var(--col) - 1) * 15deg))
+      scale(var(--lift));
+    transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 13;
+      pointer-events: none;
+      border-radius: inherit;
+      background-image: repeating-linear-gradient(
+        45deg,
+        rgb(255 255 255 / 0) 0%,
+        rgb(255 255 255 / 0.1) 1%,
+        rgb(255 255 255 / 0) 2%
+      );
+      mix-blend-mode: overlay;
+      opacity: 0.4;
+      transition: opacity 0.3s ease;
+    }
+  }
+
+  .card-container:has(.tracker:hover) {
+    .holo-card {
+      --lift: 1.05;
+    }
+
+    .holo-glare,
+    .holo-spotlight,
+    .cartoon-shine {
+      opacity: 0.9;
+    }
+
+    .cartoon-shine {
+      animation: none;
+    }
+
+    .holo-card::after {
+      opacity: 0.6;
+    }
+  }
+
+  .holo-glare {
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+    mix-blend-mode: color-dodge;
+    pointer-events: none;
+    border-radius: inherit;
+    -webkit-mask-image: radial-gradient(
+      circle at 50% 50%,
+      #000 0%,
+      rgb(0 0 0 / 0.6) 20%,
+      transparent 50%
+    );
+    mask-image: radial-gradient(
+      circle at 50% 50%,
+      #000 0%,
+      rgb(0 0 0 / 0.6) 20%,
+      transparent 50%
+    );
+    -webkit-mask-size: 200% 200%;
+    mask-size: 200% 200%;
+    -webkit-mask-position: var(--pos-x) var(--pos-y);
+    mask-position: var(--pos-x) var(--pos-y);
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    background-image: linear-gradient(
+      115deg,
+      #00f0ff 0%,
+      #00ff66 20%,
+      #ffff00 40%,
+      #ff0080 60%,
+      #8a2be2 80%,
+      #00f0ff 100%
+    );
+    background-size: 200% 200%;
+    background-position: var(--pos-x) var(--pos-y);
+    opacity: 0;
+    transition:
+      background-position 0.4s ease,
+      -webkit-mask-position 0.4s ease,
+      mask-position 0.4s ease,
+      opacity 0.4s ease;
+  }
+
+  .holo-spotlight {
+    position: absolute;
+    inset: 0;
+    z-index: 11;
+    mix-blend-mode: overlay;
+    pointer-events: none;
+    border-radius: inherit;
+    background-image: radial-gradient(
+      circle at 50% 50%,
+      rgb(255 255 255 / 1) 0%,
+      rgb(200 220 240 / 0.6) 20%,
+      transparent 50%
+    );
+    background-size: 200% 200%;
+    background-position: var(--pos-x) var(--pos-y);
+    background-repeat: no-repeat;
+    opacity: 0;
+    transition:
+      background-position 0.4s ease,
+      opacity 0.4s ease;
+  }
+
+  .cartoon-shine {
+    position: absolute;
+    inset: 0;
+    z-index: 12;
+    mix-blend-mode: overlay;
+    pointer-events: none;
+    border-radius: inherit;
+    background-image: linear-gradient(
+      115deg,
+      transparent 0%,
+      transparent 45%,
+      rgb(255 255 255 / 0.5) 48%,
+      #fff 50%,
+      rgb(255 255 255 / 0.5) 52%,
+      transparent 55%,
+      transparent 100%
+    );
+    background-size: 300% 300%;
+    background-position: var(--pos-x) var(--pos-y);
+    opacity: 0.6;
+    transition:
+      background-position 0.4s ease,
+      opacity 0.4s ease;
+    animation: ambientShine 10s ease-in-out infinite;
+  }
+
+  @keyframes ambientShine {
+    0%,
+    80% {
+      background-position: 30% 50%;
+    }
+    90% {
+      background-position: 70% 50%;
+    }
+    100% {
+      background-position: 30% 50%;
+    }
+  }
+
+  .card-content {
+    position: absolute;
+    inset: 12px;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    border: 2px solid #90a4ae;
+    border-radius: 5px;
+    background: linear-gradient(to bottom, #eceff1, #b0bec5);
+    box-shadow: inset 0 0 10px rgb(0 0 0 / 0.1);
+  }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    font-weight: bold;
+  }
+
+  .project-title {
+    font-size: 1.4rem;
+    color: #111;
+    text-wrap: balance;
+    text-shadow: 1px 1px 0 rgb(255 255 255 / 0.8);
+  }
+
+  .ex {
+    font-size: 1.2rem;
+    font-style: italic;
+    color: #0050b3;
+    text-shadow: 1px 1px 0 rgb(255 255 255 / 0.8);
+  }
+
+  .project-hp {
+    font-size: 1.1rem;
+    color: #111;
+  }
+
+  .card-body {
+    display: flex;
+    flex-grow: 1;
+    flex-direction: column;
+  }
+
+  .tech-stack {
+    margin-bottom: 20px;
+    padding: 5px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-align: center;
+    color: #111;
+    border: 1px solid rgb(0 0 0 / 0.1);
+    border-radius: 10px;
+    background: rgb(255 255 255 / 0.6);
+  }
+
+  .attack-move {
+    flex-grow: 1;
+    margin-bottom: 15px;
+  }
+
+  .move-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #111;
+  }
+
+  .move-desc {
+    margin: 0;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: #222;
+    text-wrap: pretty;
+  }
+
+  .card-footer {
+    display: flex;
+    justify-content: space-between;
+    margin-top: auto;
+    padding-top: 10px;
+    font-size: 0.8rem;
+    border-top: 1px solid rgb(0 0 0 / 0.2);
+  }
+
+  .stat-box {
+    text-align: center;
+  }
+
+  .stat-label {
+    display: block;
+    margin-bottom: 4px;
+    font-size: 0.65rem;
+    font-weight: bold;
+    color: #444;
+    text-transform: uppercase;
+  }
+
+  .stat-value {
+    font-weight: bold;
+    color: #111;
+  }
+</style>
+
+<script>
+  const containers = document.querySelectorAll<HTMLElement>('.card-container');
+
+  containers.forEach((container) => {
+    const card = container.querySelector<HTMLElement>('.holo-card');
+    if (!card) return;
+
+    container.addEventListener('pointerover', (event) => {
+      const cell = (event.target as HTMLElement).closest<HTMLElement>('.tracker');
+      card.style.setProperty('--i', cell?.style.getPropertyValue('--i').trim() || '4');
+    });
+
+    container.addEventListener('pointerleave', () => {
+      card.style.setProperty('--i', '4');
+    });
+  });
+</script>
